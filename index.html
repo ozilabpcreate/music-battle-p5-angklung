@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Battle ป.5 — ภารกิจพิชิตโลกอังกะลุง</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Tahoma", "Arial", sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #17153d, #302b63, #24243e);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.screen {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+}
+
+.hidden {
+    display: none;
+}
+
+/* START */
+.start-screen {
+    text-align: center;
+}
+
+.logo {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 20px;
+    opacity: 0.9;
+    margin-bottom: 25px;
+}
+
+.info-box {
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 18px;
+    margin: 20px 0;
+    line-height: 2;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.start-btn {
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    background: #ffd166;
+    color: #222;
+    transition: 0.2s;
+}
+
+.start-btn:hover {
+    transform: scale(1.05);
+}
+
+/* GAME */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    background: rgba(255,255,255,0.1);
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.timer-box {
+    margin-bottom: 20px;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.timer-progress {
+    height: 100%;
+    width: 100%;
+    background: #06d6a0;
+    transition: width 1s linear;
+}
+
+.question-number {
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.question {
+    font-size: 27px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.choice {
+    padding: 18px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 2px solid rgba(255,255,255,0.15);
+    font-size: 18px;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.choice:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.choice.correct {
+    background: #06d6a0;
+    color: #102a43;
+    border-color: #06d6a0;
+}
+
+.choice.wrong {
+    background: #ef476f;
+    border-color: #ef476f;
+}
+
+.choice:disabled {
+    cursor: default;
+}
+
+.explanation {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.1);
+    line-height: 1.6;
+}
+
+/* RESULT */
+.result-screen {
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+.final-score {
+    font-size: 55px;
+    font-weight: bold;
+    color: #ffd166;
+    margin: 15px 0;
+}
+
+.result-message {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+.result-detail {
+    background: rgba(255,255,255,0.1);
+    border-radius: 18px;
+    padding: 20px;
+    line-height: 2;
+    margin-bottom: 25px;
+}
+
+.restart-btn {
+    padding: 14px 35px;
+    border-radius: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #06d6a0;
+    color: #102a43;
+}
+
+/* MOBILE */
+@media (max-width: 650px) {
+    .screen {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .logo {
+        font-size: 60px;
+    }
+
+    .question {
+        font-size: 22px;
+    }
+
+    .choices {
+        grid-template-columns: 1fr;
+    }
+
+    .choice {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- START SCREEN -->
+<div id="startScreen" class="screen start-screen">
+
+    <div class="logo">🎵</div>
+
+    <h1>Music Battle ป.5</h1>
+
+    <div class="subtitle">
+        🏆 ภารกิจพิชิตโลกอังกะลุง 🏆
+    </div>
+
+    <div class="info-box">
+        🎯 จำนวนคำถาม : 20 ข้อ<br>
+        ❤️ พลังชีวิต : 3 ดวง<br>
+        ⏱️ เวลา : 20 วินาที / ข้อ<br>
+        ⭐ ตอบถูก : 10 คะแนน<br>
+        🔥 มีระบบ Combo
+    </div>
+
+    <button class="start-btn" onclick="startGame()">
+        🚀 เริ่มภารกิจ
+    </button>
+
+</div>
+
+
+<!-- GAME SCREEN -->
+<div id="gameScreen" class="screen hidden">
+
+    <div class="top-bar">
+
+        <div class="stat">
+            📌 ข้อ <span id="questionNumber">1</span>/20
+        </div>
+
+        <div class="stat">
+            ⭐ คะแนน <span id="score">0</span>
+        </div>
+
+        <div class="stat">
+            🔥 Combo <span id="combo">0</span>
+        </div>
+
+        <div class="stat">
+            ❤️ <span id="hearts">❤️❤️❤️</span>
+        </div>
+
+    </div>
+
+    <div class="timer-box">
+        <div class="timer-bar">
+            <div id="timerProgress" class="timer-progress"></div>
+        </div>
+    </div>
+
+    <div class="question-number">
+        คำถามข้อที่ <span id="questionIndex">1</span>
+    </div>
+
+    <div id="question" class="question"></div>
+
+    <div id="choices" class="choices"></div>
+
+    <div id="explanation" class="explanation hidden"></div>
+
+</div>
+
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="screen result-screen hidden">
+
+    <div class="result-icon">🏆</div>
+
+    <h1>จบภารกิจ!</h1>
+
+    <div id="finalScore" class="final-score">
+        0 คะแนน
+    </div>
+
+    <div id="resultMessage" class="result-message"></div>
+
+    <div class="result-detail">
+        🎯 ตอบถูก : <span id="correctCount">0</span> ข้อ<br>
+        ❌ ตอบผิด : <span id="wrongCount">0</span> ข้อ<br>
+        🔥 Combo สูงสุด : <span id="maxCombo">0</span>
+    </div>
+
+    <button class="restart-btn" onclick="startGame()">
+        🔄 เล่นอีกครั้ง
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const questions = [
+
+{
+question: "อังกะลุงเป็นเครื่องดนตรีประเภทใด?",
+choices: [
+"เครื่องสาย",
+"เครื่องตี",
+"เครื่องเป่า",
+"เครื่องสี"
+],
+answer: 1,
+explanation: "อังกะลุงเป็นเครื่องดนตรีประเภทเครื่องตี เพราะเกิดเสียงจากการเขย่าให้กระบอกไม้ไผ่กระทบกัน"
+},
+
+{
+question: "วัสดุสำคัญที่ใช้ทำอังกะลุงคืออะไร?",
+choices: [
+"ไม้ไผ่",
+"โลหะ",
+"หนังสัตว์",
+"พลาสติก"
+],
+answer: 0,
+explanation: "อังกะลุงทำจากไม้ไผ่เป็นวัสดุหลัก"
+},
+
+{
+question: "วิธีทำให้อังกะลุงเกิดเสียงคือข้อใด?",
+choices: [
+"เป่า",
+"สี",
+"เขย่า",
+"ดีด"
+],
+answer: 2,
+explanation: "การเล่นอังกะลุงใช้วิธีเขย่าเครื่องดนตรีให้กระบอกไม้ไผ่กระทบกัน"
+},
+
+{
+question: "ผู้บรรเลงอังกะลุงควรจับเครื่องดนตรีอย่างไร?",
+choices: [
+"จับให้มั่นคงและพร้อมเขย่า",
+"วางไว้บนพื้น",
+"จับเฉพาะด้านบน",
+"ถือด้วยมือเดียวโดยไม่ต้องระวัง"
+],
+answer: 0,
+explanation: "ควรจับอังกะลุงให้มั่นคงและพร้อมสำหรับการเขย่าอย่างถูกจังหวะ"
+},
+
+{
+question: "สิ่งใดสำคัญที่สุดในการบรรเลงอังกะลุงเป็นวง?",
+choices: [
+"เล่นให้ดังที่สุด",
+"เล่นเร็วที่สุด",
+"เล่นตามใจตนเอง",
+"รักษาจังหวะและฟังเพื่อนร่วมวง"
+],
+answer: 3,
+explanation: "การบรรเลงเป็นวงต้องรักษาจังหวะและฟังเสียงของสมาชิกคนอื่น"
+},
+
+{
+question: "หากเพื่อนในวงเล่นผิดจังหวะ เราควรทำอย่างไร?",
+choices: [
+"หยุดเล่นทันที",
+"หัวเราะเพื่อน",
+"ตั้งสติและกลับมาเข้าจังหวะ",
+"เล่นให้ดังขึ้น"
+],
+answer: 2,
+explanation: "ควรตั้งสติและกลับมาเล่นตามจังหวะของวง"
+},
+
+{
+question: "การดูแลอังกะลุงที่เหมาะสมคือข้อใด?",
+choices: [
+"เก็บในที่แห้งและสะอาด",
+"แช่น้ำเพื่อป้องกันไม้แห้ง",
+"ตากแดดจัดทุกวัน",
+"วางไว้กลางแจ้ง"
+],
+answer: 0,
+explanation: "ควรเก็บเครื่องดนตรีไว้ในบริเวณที่แห้ง สะอาด และเหมาะสม"
+},
+
+{
+question: "ข้อใดเป็นมารยาทของผู้บรรเลงดนตรีที่ดี?",
+choices: [
+"คุยระหว่างการแสดง",
+"ตั้งใจและรับผิดชอบหน้าที่",
+"เล่นก่อนสัญญาณเริ่ม",
+"แกล้งเพื่อนร่วมวง"
+],
+answer: 1,
+explanation: "นักดนตรีที่ดีควรมีความรับผิดชอบและตั้งใจในการบรรเลง"
+},
+
+{
+question: "หากต้องบรรเลงอังกะลุงพร้อมกันหลายคน สิ่งใดช่วยให้วงเล่นได้พร้อมเพรียง?",
+choices: [
+"การฟังและนับจังหวะ",
+"การเล่นให้ดังที่สุด",
+"การเล่นเร็วกว่าเพื่อน",
+"การไม่สนใจผู้ควบคุม"
+],
+answer: 0,
+explanation: "การฟังและนับจังหวะช่วยให้สมาชิกเล่นพร้อมกัน"
+},
+
+{
+question: "ข้อใดกล่าวถูกต้องเกี่ยวกับจังหวะในการบรรเลง?",
+choices: [
+"ไม่จำเป็นต้องรักษาจังหวะ",
+"ทุกคนควรเล่นตามจังหวะเดียวกัน",
+"คนที่เล่นดังที่สุดเป็นผู้กำหนดจังหวะ",
+"สามารถเล่นเร็วช้าตามใจได้"
+],
+answer: 1,
+explanation: "สมาชิกในวงควรรักษาจังหวะเดียวกันเพื่อให้เพลงมีความเป็นระเบียบ"
+},
+
+{
+question: "ก่อนเริ่มบรรเลงอังกะลุง นักเรียนควรทำสิ่งใด?",
+choices: [
+"ตรวจสอบเครื่องดนตรีและเตรียมตัว",
+"เล่นทันทีโดยไม่ฟังคำสั่ง",
+"วางเครื่องดนตรีไว้ที่พื้น",
+"พูดคุยเสียงดัง"
+],
+answer: 0,
+explanation: "ควรตรวจสอบเครื่องดนตรีและเตรียมพร้อมก่อนเริ่มการบรรเลง"
+},
+
+{
+question: "การเล่นอังกะลุงที่ดีควรใช้แรงเขย่าอย่างไร?",
+choices: [
+"แรงที่สุดเสมอ",
+"เบาหรือแรงตามลักษณะเพลง",
+"แรงจนเครื่องดนตรีกระแทกพื้น",
+"ไม่ต้องควบคุมแรง"
+],
+answer: 1,
+explanation: "ควรควบคุมแรงในการเขย่าให้เหมาะสมกับเพลงและเสียงที่ต้องการ"
+},
+
+{
+question: "ถ้าเพลงกำหนดให้หยุดเล่น นักเรียนควรทำอย่างไร?",
+choices: [
+"เล่นต่อ",
+"เขย่าแรงขึ้น",
+"หยุดตามจังหวะและสัญญาณ",
+"เปลี่ยนเพลง"
+],
+answer: 2,
+explanation: "ต้องหยุดตามจังหวะและสัญญาณของผู้ควบคุมวง"
+},
+
+{
+question: "ข้อใดแสดงถึงการทำงานเป็นทีมในการบรรเลงอังกะลุง?",
+choices: [
+"ทุกคนทำหน้าที่ของตนเองและฟังกัน",
+"คนเดียวเล่นทุกเสียง",
+"ไม่ต้องสนใจเพื่อน",
+"เล่นตามใจตนเอง"
+],
+answer: 0,
+explanation: "การทำงานเป็นทีมต้องรับผิดชอบหน้าที่ของตนเองและร่วมมือกับสมาชิก"
+},
+
+{
+question: "เมื่อผู้ชมปรบมือหลังการแสดง นักเรียนควรทำอย่างไร?",
+choices: [
+"เดินหนีทันที",
+"พูดคุยเสียงดัง",
+"แสดงความขอบคุณและมีมารยาท",
+"หัวเราะใส่ผู้ชม"
+],
+answer: 2,
+explanation: "ผู้แสดงควรแสดงความขอบคุณและรักษามารยาท"
+},
+
+{
+question: "เหตุใดจึงไม่ควรเขย่าอังกะลุงแรงเกินไป?",
+choices: [
+"ทำให้เสียงเบาเกินไป",
+"อาจทำให้เครื่องดนตรีเสียหาย",
+"ทำให้เพลงช้าลงเสมอ",
+"ทำให้ไม้ไผ่เปลี่ยนสีทันที"
+],
+answer: 1,
+explanation: "การเขย่าแรงเกินไปอาจทำให้ส่วนประกอบของเครื่องดนตรีเสียหาย"
+},
+
+{
+question: "ถ้าต้องการให้การบรรเลงมีความพร้อมเพรียง นักเรียนควรปฏิบัติอย่างไร?",
+choices: [
+"ฟังจังหวะและผู้ควบคุมวง",
+"เล่นก่อนเพื่อน",
+"เร่งความเร็ว",
+"ไม่ต้องฟังใคร"
+],
+answer: 0,
+explanation: "การฟังจังหวะและผู้ควบคุมวงช่วยให้สมาชิกเล่นพร้อมกัน"
+},
+
+{
+question: "ข้อใดไม่เหมาะสมในการเก็บรักษาอังกะลุง?",
+choices: [
+"เก็บในที่แห้ง",
+"ทำความสะอาดก่อนเก็บ",
+"เก็บในที่มีความชื้นสูง",
+"จัดเก็บอย่างเป็นระเบียบ"
+],
+answer: 2,
+explanation: "ความชื้นสูงอาจส่งผลเสียต่อวัสดุไม้ไผ่ของเครื่องดนตรี"
+},
+
+{
+question: "ถ้าเพื่อนเล่นผิด นักเรียนควรมีพฤติกรรมอย่างไร?",
+choices: [
+"ล้อเลียน",
+"ช่วยกันแก้ไขและให้กำลังใจ",
+"หยุดเล่นทั้งหมด",
+"ตำหนิเสียงดัง"
+],
+answer: 1,
+explanation: "การให้กำลังใจและช่วยกันแก้ไขเป็นพฤติกรรมที่เหมาะสมในการทำงานเป็นทีม"
+},
+
+{
+question: "หัวใจสำคัญของการบรรเลงอังกะลุงเป็นวงคืออะไร?",
+choices: [
+"ความดัง",
+"ความเร็ว",
+"ความพร้อมเพรียงและความร่วมมือ",
+"การเล่นคนเดียว"
+],
+answer: 2,
+explanation: "การบรรเลงเป็นวงต้องอาศัยความพร้อมเพรียง การฟัง และความร่วมมือของสมาชิกทุกคน"
+}
+
+];
+
+let currentQuestion = 0;
+let score = 0;
+let hearts = 3;
+let combo = 0;
+let maxCombo = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let timer;
+let timeLeft = 20;
+
+function startGame() {
+
+    currentQuestion = 0;
+    score = 0;
+    hearts = 3;
+    combo = 0;
+    maxCombo = 0;
+    correctCount = 0;
+    wrongCount = 0;
+
+    document.getElementById("startScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("gameScreen").classList.remove("hidden");
+
+    updateStats();
+    showQuestion();
+}
+
+function showQuestion() {
+
+    clearInterval(timer);
+
+    if (currentQuestion >= questions.length || hearts <= 0) {
+        endGame();
+        return;
+    }
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("questionNumber").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("questionIndex").textContent =
+        currentQuestion + 1;
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = "";
+
+    q.choices.forEach((choice, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "choice";
+        button.textContent =
+            String.fromCharCode(65 + index) + ". " + choice;
+
+        button.onclick = () => checkAnswer(index, button);
+
+        choicesDiv.appendChild(button);
+    });
+
+    document.getElementById("explanation").classList.add("hidden");
+
+    timeLeft = 20;
+    updateTimer();
+
+    timer = setInterval(() => {
+
+        timeLeft--;
+
+        updateTimer();
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            timeOut();
+        }
+
+    }, 1000);
+}
+
+function updateTimer() {
+
+    const progress =
+        (timeLeft / 20) * 100;
+
+    document.getElementById("timerProgress").style.width =
+        progress + "%";
+}
+
+function checkAnswer(selected, button) {
+
+    clearInterval(timer);
+
+    const q = questions[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".choice");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (selected === q.answer) {
+
+        button.classList.add("correct");
+
+        score += 10;
+
+        combo++;
+
+        correctCount++;
+
+        if (combo > maxCombo) {
+            maxCombo = combo;
+        }
+
+    } else {
+
+        button.classList.add("wrong");
+
+        buttons[q.answer].classList.add("correct");
+
+        hearts--;
+
+        combo = 0;
+
+        wrongCount++;
+    }
+
+    showExplanation(q.explanation);
+    updateStats();
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }, 1800);
+}
+
+function timeOut() {
+
+    const q = questions[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".choice");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    buttons[q.answer].classList.add("correct");
+
+    hearts--;
+    combo = 0;
+    wrongCount++;
+
+    showExplanation(
+        "หมดเวลา! คำตอบที่ถูกคือ " +
+        q.choices[q.answer]
+    );
+
+    updateStats();
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        showQuestion();
+
+    }, 1800);
+}
+
+function showExplanation(text) {
+
+    const box =
+        document.getElementById("explanation");
+
+    box.textContent = "💡 " + text;
+
+    box.classList.remove("hidden");
+}
+
+function updateStats() {
+
+    document.getElementById("score").textContent =
+        score;
+
+    document.getElementById("combo").textContent =
+        combo;
+
+    document.getElementById("hearts").textContent =
+        "❤️".repeat(hearts) +
+        "🖤".repeat(3 - hearts);
+}
+
+function endGame() {
+
+    clearInterval(timer);
+
+    document.getElementById("gameScreen")
+        .classList.add("hidden");
+
+    document.getElementById("resultScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("finalScore").textContent =
+        score + " คะแนน";
+
+    document.getElementById("correctCount").textContent =
+        correctCount;
+
+    document.getElementById("wrongCount").textContent =
+        wrongCount;
+
+    document.getElementById("maxCombo").textContent =
+        maxCombo;
+
+    let message = "";
+
+    if (score >= 180) {
+        message = "🏆 สุดยอดนักดนตรี! เธอคือจอมยุทธ์แห่งอังกะลุง!";
+    }
+    else if (score >= 140) {
+        message = "🥇 เก่งมาก! ความรู้เรื่องอังกะลุงแน่นมาก!";
+    }
+    else if (score >= 100) {
+        message = "🥈 ทำได้ดี! ฝึกอีกนิดจะเก่งขึ้นอีก!";
+    }
+    else if (score >= 60) {
+        message = "🥉 พยายามได้ดี! กลับไปทบทวนอีกครั้งนะ!";
+    }
+    else {
+        message = "🎵 ไม่เป็นไร! ลองเล่นอีกครั้งแล้วพิชิตอังกะลุงให้ได้!";
+    }
+
+    document.getElementById("resultMessage").textContent =
+        message;
+}
+
+</script>
+
+</body>
+</html>
